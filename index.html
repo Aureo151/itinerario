@@ -7,14 +7,14 @@
     <!-- Incluimos la librería html2canvas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* --- ESTILOS BASADOS EN LA IMAGEN DE REFERENCIA --- */
+        /* --- ESTILOS BASADOS EN LA IDENTIDAD VISUAL --- */
         :root {
-            --bg-page: #f0f4f8; /* Color claro de fondo */
-            --navy-dark: #1b2a41; /* Azul oscuro para header y círculos */
-            --navy-medium: #2b3d5b; /* Azul medio para los recuadros de días */
+            --bg-page: #f0f4f8; 
+            --navy-dark: #1b2a41; 
+            --navy-medium: #2b3d5b; 
             --navy-light: #344a6e;
             --text-white: #ffffff;
-            --text-label: #a9b7cf; /* Color celeste claro para los títulos de cada campo */
+            --text-label: #a9b7cf; 
             --iasd-teal: #3b8a8b;
             --iasd-gold: #cfa86a;
         }
@@ -114,7 +114,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* --- DISEÑO DE FILAS (Como la imagen de referencia) --- */
+        /* --- DISEÑO DE FILAS CON CIRCULOS AL FRENTE --- */
         .day-row {
             display: flex;
             align-items: center;
@@ -132,8 +132,10 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 2; /* Para que quede encima del recuadro */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            /* Z-INDEX IMPORTANTE PARA QUE ESTÉ AL FRENTE */
+            position: relative;
+            z-index: 10; 
+            box-shadow: 4px 0px 10px rgba(0,0,0,0.3);
             flex-shrink: 0;
         }
 
@@ -155,9 +157,11 @@
             background-color: var(--navy-medium);
             color: var(--text-white);
             margin-left: -55px; /* Empuja el recuadro debajo del círculo */
-            padding: 25px 20px 25px 75px; /* Espacio extra a la izquierda para el círculo */
+            padding: 25px 20px 25px 70px; /* Espacio extra para el círculo */
             border-radius: 0 12px 12px 0;
             flex-grow: 1;
+            /* SE MANTIENE POR DEBAJO DEL CÍRCULO */
+            position: relative;
             z-index: 1;
             min-height: 90px;
             display: flex;
@@ -165,7 +169,6 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        /* Rejilla para alinear Etiquetas y Valores */
         .detail-grid {
             display: grid;
             grid-template-columns: max-content 1fr;
@@ -185,7 +188,7 @@
             font-size: 1.05rem;
         }
 
-        /* Contenedor de Botones */
+        /* --- BOTONES MINIMALISTAS Y MENÚ DESPLEGABLE --- */
         .share-container {
             display: flex;
             justify-content: center;
@@ -207,24 +210,18 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            text-decoration: none;
         }
 
-        .btn-img {
+        .btn-share-main {
             background-color: var(--iasd-teal);
             box-shadow: 0 4px 15px rgba(59, 138, 139, 0.4);
         }
-        .btn-img:hover { background-color: #2e6c6d; transform: translateY(-2px); }
-
-        .btn-txt {
-            background-color: #25D366; /* Verde WhatsApp */
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-        }
-        .btn-txt:hover { background-color: #1ebc5a; transform: translateY(-2px); }
+        .btn-share-main:hover { background-color: #2e6c6d; transform: translateY(-2px); }
 
         .btn-pdf {
             background-color: var(--navy-dark);
             box-shadow: 0 4px 15px rgba(27, 42, 65, 0.4);
-            text-decoration: none; 
         }
         .btn-pdf:hover { background-color: #0d1624; transform: translateY(-2px); }
 
@@ -233,6 +230,58 @@
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
+        }
+
+        /* Estilos del Dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            bottom: 115%; /* Se despliega hacia arriba para evitar que se corte */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ffffff;
+            min-width: 210px;
+            box-shadow: 0px 8px 24px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            z-index: 100;
+            overflow: hidden;
+            border: 1px solid #eaeaea;
+        }
+
+        .dropdown-content.show {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dropdown-item {
+            padding: 15px 20px;
+            color: var(--navy-dark);
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--bg-page);
+        }
+
+        .dropdown-item svg {
+            color: var(--iasd-teal);
         }
 
         /* Responsivo para móviles pequeños */
@@ -252,7 +301,6 @@
 
     <header>
         <img src="logo_iasd.png" alt="Logo IASD">
-        <!-- Título modificado -->
         <h1>IGLESIA ADVENTISTA DE LA ZONA 6<br>ITINERARIO DE ACTIVIDADES</h1>
     </header>
 
@@ -350,18 +398,35 @@
 
             </div> <!-- Fin capture-area -->
 
-            <!-- CONTENEDOR DE BOTONES -->
+            <!-- CONTENEDOR DE BOTONES (MODIFICADO) -->
             <div class="share-container">
-                <button class="btn-action btn-img" id="btn-share-img" onclick="compartirComoImagen()">
-                    <span id="share-text-img">Compartir Imagen</span>
-                </button>
-
-                <!-- NUEVO BOTÓN DE TEXTO -->
-                <button class="btn-action btn-txt" onclick="compartirComoTexto()">
-                    <span>Compartir Texto</span>
-                </button>
+                
+                <!-- DROPDOWN COMPARTIR -->
+                <div class="dropdown">
+                    <button class="btn-action btn-share-main" onclick="toggleDropdown()" id="btn-share-main">
+                        <!-- Icono Compartir Minimalista -->
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                        <span id="share-text-main">Compartir</span>
+                    </button>
+                    
+                    <!-- Menú Desplegable -->
+                    <div class="dropdown-content" id="shareDropdown">
+                        <div class="dropdown-item" onclick="compartirComoImagen()">
+                            <!-- Icono Imagen Minimalista -->
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                            Compartir Imagen
+                        </div>
+                        <div class="dropdown-item" onclick="compartirComoTexto()">
+                            <!-- Icono Texto Minimalista -->
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                            Compartir Texto
+                        </div>
+                    </div>
+                </div>
                 
                 <a class="btn-action btn-pdf" href="https://drive.google.com/uc?export=download&id=1lELqt1Y0PqGmUna47-rtEszuua1jkoOO" target="_blank" rel="noopener noreferrer">
+                    <!-- Icono Descargar PDF Minimalista -->
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><polyline points="9 15 12 18 15 15"></polyline></svg>
                     <span>Itinerario PDF</span>
                 </a>
             </div>
@@ -372,6 +437,24 @@
     <script>
         const API_URL = 'https://script.google.com/macros/s/AKfycbwQjPfPCzTCmxEdZogUAsDr3R1xn9fbWz4xa5mWE9ynA-g0IFVgxel7w3JGMQB4k5Y-7g/exec';    
         let semanasData = [];
+
+        // Funciones para el Menú Desplegable
+        function toggleDropdown() {
+            document.getElementById("shareDropdown").classList.toggle("show");
+        }
+
+        // Cierra el menú desplegable si se hace clic fuera de él
+        window.onclick = function(event) {
+            if (!event.target.closest('.dropdown')) {
+                let dropdowns = document.getElementsByClassName("dropdown-content");
+                for (let i = 0; i < dropdowns.length; i++) {
+                    let openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
 
         async function cargarDatos() {
             try {
@@ -439,12 +522,8 @@
             const semana = semanasData[index];
             if(!semana) return;
 
-            document.getElementById('btn-share-img').dataset.semanaName = semana.semana;
-
-            // Anciano
             document.getElementById('anciano-turno').textContent = semana.anciano || '--';
 
-            // Extraer solo los números de los días (ej: "28/06/2026" -> "28")
             const getDia = (fechaStr) => fechaStr ? fechaStr.split('/')[0] : '--';
 
             // Domingo
@@ -486,10 +565,13 @@
         }
 
         async function compartirComoImagen() {
+            toggleDropdown(); // Cerramos el menú
             const areaCaptura = document.getElementById('capture-area');
-            const boton = document.getElementById('btn-share-img');
-            const textoBoton = document.getElementById('share-text-img');
-            const rangoSemanas = boton.dataset.semanaName || 'itinerario';
+            const boton = document.getElementById('btn-share-main');
+            const textoBoton = document.getElementById('share-text-main');
+            
+            const selector = document.getElementById('week-selector');
+            const rangoSemanas = selector.options[selector.selectedIndex].text || 'itinerario';
 
             boton.disabled = true;
             textoBoton.textContent = 'Generando...';
@@ -534,12 +616,13 @@
                 alert('Hubo un error al generar la imagen.');
             } finally {
                 boton.disabled = false;
-                textoBoton.textContent = 'Compartir Imagen';
+                textoBoton.textContent = 'Compartir';
             }
         }
 
-        // --- NUEVA FUNCIÓN: COMPARTIR COMO TEXTO ---
+        // --- COMPARTIR COMO TEXTO ---
         async function compartirComoTexto() {
+            toggleDropdown(); // Cerramos el menú
             const index = document.getElementById('week-selector').value;
             if(index === "") {
                 alert("Por favor selecciona una semana primero.");
@@ -548,19 +631,19 @@
             
             const semana = semanasData[index];
             
-            // Construimos el texto con formato para WhatsApp (usando *asteriscos* para negrita)
+            // Reemplazo del emoji por 🗓️ (calendario en espiral genérico sin número visible)
             let texto = `*IGLESIA ADVENTISTA DE LA ZONA 6*\n`;
             texto += `*ITINERARIO DE ACTIVIDADES*\n`;
             texto += `----------------------------------\n`;
             if(semana.anciano) texto += `*Anciano de Turno:* ${semana.anciano}\n\n`;
 
-            texto += `📅 *DOMINGO ${semana.domingo.fecha}*\n`;
+            texto += `🗓️ *DOMINGO ${semana.domingo.fecha}*\n`;
             texto += `• Predicador: ${semana.domingo.predicador}\n\n`;
 
-            texto += `📅 *MIÉRCOLES ${semana.miercoles.fecha}*\n`;
+            texto += `🗓️ *MIÉRCOLES ${semana.miercoles.fecha}*\n`;
             texto += `• Predicador: ${semana.miercoles.predicador}\n\n`;
 
-            texto += `📅 *SÁBADO ${semana.sabado.fecha}*\n`;
+            texto += `🗓️ *SÁBADO ${semana.sabado.fecha}*\n`;
             texto += `• Culto Divino: ${semana.sabado.predicador}\n`;
             if(semana.sabado.escuelaSabatica) texto += `• Esc. Sabática: ${semana.sabado.escuelaSabatica}\n`;
             if(semana.sabado.maestro) texto += `• Maestro: ${semana.sabado.maestro}\n`;
@@ -571,7 +654,7 @@
             if(semana.sabado.diaconos) texto += `• Diáconos: ${semana.sabado.diaconos}\n`;
             if(semana.sabado.sociedad) texto += `• Soc. Jóvenes: ${semana.sabado.sociedad}\n`;
 
-            // Intentar usar la API de compartir nativa (ideal para móviles)
+            // Compartir
             if (navigator.share) {
                 try {
                     await navigator.share({
@@ -580,16 +663,15 @@
                     });
                     return;
                 } catch(e) {
-                    console.log("El usuario canceló o hubo un error al compartir:", e);
+                    console.log("Compartir cancelado o error:", e);
                 }
             } 
             
-            // Si está en PC o falla el paso anterior, copiar al portapapeles
             try {
                 await navigator.clipboard.writeText(texto);
                 alert("✅ ¡Texto copiado al portapapeles!\n\nYa puedes ir a WhatsApp, hacer clic derecho (o mantener presionado) y seleccionar 'Pegar'.");
             } catch(err) {
-                alert("No se pudo copiar automáticamente. Por favor revisa los permisos de tu navegador.");
+                alert("No se pudo copiar. Por favor revisa los permisos de tu navegador.");
             }
         }
 
